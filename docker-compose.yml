@@ -1,0 +1,22 @@
+version: "3.7"
+services:
+  griffel_wifi_page:
+    build: .
+    container_name: griffel_wifi_page
+    env_file:
+      - .env
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.griffel_wifi_page.rule=Host(`griffel.fastbots.net`)
+      - traefik.http.routers.griffel_wifi_page.entrypoints=websecure
+      - traefik.http.routers.griffel_wifi_page.tls.certresolver=letsencrypt
+      - traefik.http.routers.griffel_wifi_page.service=griffel_wifi_page
+      - traefik.http.services.griffel_wifi_page.loadbalancer.server.port=8085
+    networks:
+      - service
+    restart: on-failure
+
+networks:
+  service:
+    external:
+      name: docker_network
